@@ -22,10 +22,10 @@ const pRetry = (...args) => import('p-retry').then(({default: pRetry}) => pRetry
  * 
  * @description returns all the users in the database as a JSON object
  * {message: ..., data: ...} where message is either "success" or an 
- * error message. If successful, the data is a list of dictionary-like
- * objects of the form {"userid": int, "username": string, 
- * "givenname": string, "familyname": string}, in order by userid. If
- * an error occurs then the list is empty [].
+ * error message (with status code 500). If successful, the data is a 
+ * list of dictionary-like objects of the form {"userid": int, 
+ * "username": string, "givenname": string, "familyname": string}, 
+ * in order by userid. If an error occurs then the list is empty [].
  *
  * @param none
  * @returns JSON {message: string, data: [object, object, ...]} 

@@ -4,8 +4,8 @@
 // Returns (M, N) where M = # of items in the S3 bucket and 
 // N = # of users in the database. The format of the response
 // is {message: ..., M: ..., N: ...} where message is either 
-// "success" or an error message. If message is an error message, 
-// then M and N will be -1.
+// "success" or an error message (with status code 500). If 
+// message is an error message, then M and N will be -1.
 //
 // Author:
 //   Prof. Joe Hummel
@@ -28,8 +28,8 @@ const pRetry = (...args) => import('p-retry').then(({default: pRetry}) => pRetry
  * @description returns (M, N) where M = # of items in the bucket and 
  * N = # of users in the database. The format of the response is 
  * {message: ..., M: ..., N: ...} where message is either "success" or
- * an error message. If message is an error message, then M and N will
- * be -1.
+ * an error message (with status code 500). If message is an error 
+ * message, then M and N will be -1.
  *
  * @param none
  * @returns JSON {message: string, M: integer, N: integer} 
