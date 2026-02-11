@@ -104,8 +104,20 @@ exports.get_ping = async (request, response) => {
     // so we return the length of the list:
     //
     let results_s3 = results[0];
-    let contents = results_s3["Contents"];
-    let M = contents.length;
+
+    let keycount = parseInt(results_s3["KeyCount"]);
+    let M = keycount;
+
+    //
+    // NOTE: if you want the contents of the bucket, use
+    // results_s3["Contents"]. Note that if keycount == 0
+    // then contents is undefined, so this is only safe
+    // when keycount > 0.
+    //
+    // if (keycount > 0) {
+    //   let contents = results_s3["Contents"];
+    // }
+    //
     
     //
     // SQL is returning count of # of users, so extract from
