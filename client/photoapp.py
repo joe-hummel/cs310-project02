@@ -83,9 +83,9 @@ def initialize(client_config_file):
 #   M = # of items in the photoapp bucket
 #   N = # of users in the photoapp.users table
 #
-# If an error occurs / a service is not accessible, M or N
-# will be an error message. Hopefully the error messages will
-# convey what is going on (e.g. no internet connection).
+# If an error occurs / a service is not accessible, an exception
+# is raised. Exceptions of type HTTPError are from the underlying
+# web service.
 #
 @retry(stop=stop_after_attempt(3), 
         wait=wait_exponential(multiplier=1, min=2, max=30),
@@ -167,6 +167,7 @@ def get_users():
   of the list is a tuple containing userid, username, givenname
   and familyname (in this order). The tuples are ordered by 
   userid, ascending. If an error occurs, an exception is raised.
+  Exceptions of type HTTPError are from the underlying web service.
   
   Parameters
   ----------
@@ -177,7 +178,8 @@ def get_users():
   a list of all the users, where each element of the list is a tuple
   containing userid, username, givenname, and familyname in that 
   order. The list is ordered by userid, ascending. On error an 
-  exception is raised.
+  exception is raised; exceptions of type HTTPError are from the 
+  underlying web service.
   """
 
   try:
@@ -249,7 +251,8 @@ def get_images(userid = None):
   ascending. If a userid is given, then just the images with that 
   userid are returned; validity of the userid is not checked, 
   which implies that an empty list is returned if the userid is 
-  invalid. If an error occurs, an exception is raised.
+  invalid. If an error occurs, an exception is raised. Exceptions 
+  of type HTTPError are from the underlying web service.
   
   Parameters
   ----------
@@ -260,7 +263,8 @@ def get_images(userid = None):
   a list of images, where each element of the list is a tuple
   containing assetid, userid, localname, and bucketkey in that order.
   The list is ordered by assetid, ascending. If an error occurs, 
-  an exception is raised.
+  an exception is raised. Exceptions of type HTTPError are from the 
+  underlying web service.
   """
 
   raise Exception("TODO")
@@ -280,7 +284,8 @@ def post_image(userid, local_filename):
   the image; the results of this analysis are also saved in the
   database (and can be retrieved later via get_image_labels). If 
   an error occurs, an exception is raised. An invalid userid is 
-  considered a ValueError, "no such userid".
+  considered a ValueError, "no such userid". Exceptions of type 
+  HTTPError are from the underlying web service.
 
   Parameters
   ----------
@@ -309,7 +314,8 @@ def get_image(assetid, local_filename = None):
   when the file was uploaded. If successful, the filename for the
   newly-downloaded file is returned; if an error occurs then an
   exception is raised. An invalid assetid is considered a
-  ValueError, "no such assetid".
+  ValueError, "no such assetid". Exceptions of type HTTPError 
+  are from the underlying web service.
   
   Parameters
   ----------
@@ -339,7 +345,8 @@ def get_image_labels(assetid):
   (e.g. 'sailboat') and confidence is an integer (e.g. 90).
   The tuples are ordered by label, ascending. If an error occurs
   an exception is raised; an invalid assetid is considered a
-  ValueError, "no such assetid".
+  ValueError, "no such assetid". Exceptions of type HTTPError 
+  are from the underlying web service.
 
   Parameters
   ----------
@@ -351,7 +358,7 @@ def get_image_labels(assetid):
   of the list is a tuple of the form (label, confidence) where
   label is a string and confidence is an integer. If an error
   occurs an exception is raised; an invalid assetid is considered
-  a ValueError, "no such assetid".
+  a ValueError, "no such assetid". 
   """
 
   raise Exception("TODO")
@@ -372,7 +379,8 @@ def get_images_with_label(label):
   element of the list is a tuple of the form (assetid, label, 
   confidence). The list is returned in order by assetid, and for
   all elements with the same assetid, ordered by label. If an 
-  error occurs, an exception is raised.
+  error occurs, an exception is raised. Exceptions of type 
+  HTTPError are from the underlying web service.
 
   Parameters
   ----------
@@ -399,6 +407,7 @@ def delete_images():
   """
   Delete all images and associated labels from the database and 
   S3. Returns True if successful, raises an exception on error.
+  Exceptions of type HTTPError are from the underlying web service.
   The images are not deleted from S3 unless the database is 
   successfully cleared; if an error occurs either (a) there are
   no changes or (b) the database is cleared but there may be
