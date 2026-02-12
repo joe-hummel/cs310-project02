@@ -87,7 +87,7 @@ exports.get_ping = async (request, response) => {
     console.log("**Call to get /ping...");
 
     let promise_s3 = get_M();
-    let promise_mysql = await pRetry(get_N, {retries: 2});
+    let promise_mysql = pRetry(get_N, {retries: 2});
 
     //
     // wait for database and S3 to complete, if an error occurs
