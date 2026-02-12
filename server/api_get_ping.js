@@ -2,10 +2,7 @@
 // API function: get /ping
 //
 // Returns (M, N) where M = # of items in the S3 bucket and 
-// N = # of users in the database. The format of the response
-// is {message: ..., M: ..., N: ...} where message is either 
-// "success" or an error message (with status code 500). If 
-// message is an error message, then M and N will be -1.
+// N = # of users in the database.
 //
 // Author:
 //   Prof. Joe Hummel
@@ -87,7 +84,7 @@ exports.get_ping = async (request, response) => {
     console.log("**Call to get /ping...");
 
     let promise_s3 = get_M();
-    let promise_mysql = pRetry(get_N, {retries: 2});
+    let promise_mysql = pRetry( () => get_N(), {retries: 2} );
 
     //
     // wait for database and S3 to complete, if an error occurs

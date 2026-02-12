@@ -117,19 +117,20 @@ def get_ping():
     url = baseurl + "/ping"
 
     response = requests.get(url)
-    body = response.json()
 
     if response.status_code == 200:
       #
       # success
       #
+      body = response.json()
       M = body['M']
       N = body['N']
       return (M, N)
-    else:
+    elif response.status_code == 500:
       #
       # failed:
       #
+      body = response.json()
       msg = body['message']
       err_msg = f"status code {response.status_code}: {msg}"
       #
@@ -138,6 +139,13 @@ def get_ping():
       # and we are assuming the server-side is also doing retries.
       #
       raise HTTPError(err_msg)
+    else:
+      # 
+      # something unexpected happened, and in this case we don't 
+      # have a JSON-based response, so let Python raise proper
+      # HTTPError for us:
+      #
+      response.raise_for_status()
 
   except Exception as err:
     logging.error("get_ping():")
@@ -188,12 +196,12 @@ def get_users():
     url = baseurl + "/users"
 
     response = requests.get(url)
-    body = response.json()
 
     if response.status_code == 200:
       #
       # success
       #
+      body = response.json()
       rows = body['data']
 
       # 
@@ -213,10 +221,11 @@ def get_users():
         users.append(user)
 
       return users
-    else:
+    elif response.status_code == 500:
       #
       # failed:
       #
+      body = response.json()
       msg = body['message']
       err_msg = f"status code {response.status_code}: {msg}"
       #
@@ -225,6 +234,13 @@ def get_users():
       # and we are assuming the server-side is also doing retries.
       #
       raise HTTPError(err_msg)
+    else:
+      # 
+      # something unexpected happened, and in this case we don't 
+      # have a JSON-based response, so let Python raise proper
+      # HTTPError for us:
+      #
+      response.raise_for_status()
 
   except Exception as err:
     logging.error("get_users():")

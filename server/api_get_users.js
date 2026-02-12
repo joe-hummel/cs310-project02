@@ -84,7 +84,7 @@ exports.get_users = async (request, response) => {
   try {
     console.log("**Call to get /users...");
 
-    let rows = await pRetry(try_get_users, {retries: 2});
+    let rows = await pRetry( () => try_get_users(), {retries: 2} );
 
     //
     // success, return data in JSON format:
